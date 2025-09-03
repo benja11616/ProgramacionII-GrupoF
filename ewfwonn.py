@@ -1,6 +1,30 @@
 #Importar las ibrerias
 import tkinter as tk
 from tkinter import messagebox, ttk
+from datetime import datetime
+#Funcion para enmascarar fechas
+def enmascarar_fecha(texto):
+    limpio=''.join(filter(str.isdigit,texto))
+    formato_final=""
+    if len(limpio)>8:
+        limpio=limpio[:8]
+    if len(limpio)>4:
+        formato_final=f"{limpio[:2]}-{limpio[2:4]}-{limpio[4:]}"
+    elif len(limpio)>2:
+        formato_final=f"{limpio[:2]}-{limpio[2:]}"
+    else:
+        formato_final=limpio
+    if fechaN.get()!=formato_final:
+        fechaN.delete(0,tk.END)
+        fechaN.insert(0,formato_final)
+    if len(fechaN.get())==10:
+        fecha_actual=datetime.now().date()
+        fecha_nacimiento=datetime.strptime(fechaN.get(),"%d-%m-%Y").date()
+        edad=fecha_actual.year-fecha_nacimiento.year
+        edadVar.set(edad)
+    else:
+        edadVar.set("")
+    return True
 #Crear ventana principal
 ventanaPrincipal=tk.Tk()
 ventanaPrincipal.title("Libro de Pacientes y Doctores")
@@ -23,12 +47,15 @@ nombreP.grid(row=0,column=1,padx=5,pady=5,sticky="w")
 #Fecha de Nacimiento
 labelFechaN=tk.Label(frame_pacientes,text="Fecha de nacimiento:")
 labelFechaN.grid(row=1,column=0,padx=5,pady=5,sticky="w")
-fechaN=tk.Entry(frame_pacientes)
+#llamando a la funcion enmascarar fecha
+validacion_fecha=ventanaPrincipal.register(enmascarar_fecha)
+fechaN=ttk.Entry(frame_pacientes,validate="key",validatecommand=(validacion_fecha,'%P'))
 fechaN.grid(row=1,column=1,padx=5,pady=5,sticky="w")
 #Edad
 labelEdad=tk.Label(frame_pacientes,text="Edad:")
 labelEdad.grid(row=2,column=0,padx=5,pady=5,sticky="w")
-edadP=tk.Entry(frame_pacientes,state="readonly")
+edadVar=tk.StringVar()
+edadP=tk.Entry(frame_pacientes,textvariable=edadVar,state="readonly")
 edadP.grid(row=2,column=1,padx=5,pady=5,sticky="w")
 #Genero
 labelGenero=tk.Label(frame_pacientes,text="Genero:")
@@ -92,6 +119,7 @@ scroll_y=ttk.Scrollbar(frame_pacientes,orient="vertical",command=treeview.yview)
 treeview.configure(yscrollcommand=scroll_y.set)
 scroll_y.grid(row=8,column=2,sticky="ns")
 
+
 #doctores
 titulo=tk.Label(frame_doctores,text="Registro de Doctores",font=("Arial",14,"bold"))
 titulo.grid(row=0,column=1,padx=200,sticky="w")
@@ -126,7 +154,24 @@ btn_registrarD.grid(row=0,column=0,padx=5)
 #Boton eliminar
 btn_eliminarD=tk.Button(btn_frameD,text="Eliminar",command="")
 btn_eliminarD.grid(row=0,column=1,padx=5)
-
+#Crear Treeview para mostrar pacientes
+treeviewD=ttk.Treeview(frame_doctores,columns=("Nombre","Especialidad","Edad","Telefono"),show="headings")
+#Definir encabezados
+treeviewD.heading("Nombre",text="Nombre Completo")
+treeviewD.heading("Especialidad",text="Especialidad")
+treeviewD.heading("Edad",text="Edad")
+treeviewD.heading("Telefono",text="Teléfono")
+#Definir anchos de columnas
+treeviewD.column("Nombre",width=120)
+treeviewD.column("Especialidad",width=120)
+treeviewD.column("Edad",width=50,anchor="center")
+treeviewD.column("Telefono",width=60,anchor="center")
+#Ubicar el Treeview en la cuadricula
+treeviewD.grid(row=7,column=0,columnspan=2,sticky="nsew",padx=5,pady=10)
+#Scrollbar vertical
+scroll_yD=ttk.Scrollbar(frame_doctores,orient="vertical",command=treeviewD.yview)
+treeviewD.configure(yscrollcommand=scroll_yD.set)
+scroll_yD.grid(row=7,column=2,sticky="ns")
 
 
 
