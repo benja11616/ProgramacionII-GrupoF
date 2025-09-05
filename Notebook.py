@@ -25,6 +25,43 @@ def enmascarar_fecha(texto):
     else:
         edadVar.set("")
     return True
+#lista de pacientes
+pacientes_data=[]
+#funcion para registrar pacientes
+def registrar_paciente():
+    #crear un diccionario cp los datos ingresados
+    paciente={
+        "Nombre":nombreP.get(),
+        "Fecha de Nacimiento":fechaN.get(),
+        "Edad":edadVar.get(),
+        "Genero":genero.get(),
+        "Grupo Sanguineo":entryGrupoSanguineo.get(),
+        "Tipo de Seguro":tipo_seguro.get(),
+        "Centro Médico":centro_medico.get()
+    }
+    #Agregar paciente a la lista
+    pacientes_data.append(paciente)
+    #Cargar el treeview
+    cargar_treeview()
+def cargar_treeview():
+    #Limpiar el treeview
+    for paciente in treeview.get_children():
+        treeview.delete(paciente)
+    #Insertar cada paciente
+    for i, item in enumerate(pacientes_data):
+        treeview.insert(
+            "","end",iid=str(i),
+            values=(
+                item["Nombre"],
+                item["Fecha de Nacimiento"],
+                item["Edad"],
+                item["Genero"],
+                item["Grupo Sanguineo"],
+                item["Tipo de Seguro"],
+                item["Centro Médico"]
+            )
+        )
+
 #Crear ventana principal
 ventanaPrincipal=tk.Tk()
 ventanaPrincipal.title("Libro de Pacientes y Doctores")
@@ -89,7 +126,7 @@ comboCentroMedico.grid(row=7,column=1,padx=5,pady=5,sticky="w")
 btn_frame=tk.Frame(frame_pacientes)
 btn_frame.grid(row=9,column=0,columnspan=2,pady=5,sticky="w")
 #Boton registrar
-btn_registrar=tk.Button(btn_frame,text="Registrar",command="")
+btn_registrar=tk.Button(btn_frame,text="Registrar",command=registrar_paciente)
 btn_registrar.grid(row=0,column=0,padx=5)
 #Boton eliminar
 btn_eliminar=tk.Button(btn_frame,text="Eliminar",command="")
@@ -136,8 +173,8 @@ especialidad.set("Cirujia")
 comboEspecialidad=ttk.Combobox(frame_doctores,values=["Cirujia","Oftalmologia","Ninguna"],textvariable=especialidad)
 comboEspecialidad.grid(row=3,column=1,padx=5,pady=5,sticky="w")
 #Edad
-labelEdad=tk.Label(frame_doctores,text="Edad")
-labelEdad.grid(row=4,column=0,padx=5,pady=5,sticky="w")
+labelEdadD=tk.Label(frame_doctores,text="Edad")
+labelEdadD.grid(row=4,column=0,padx=5,pady=5,sticky="w")
 spin=tk.Spinbox(frame_doctores,from_=1,to=100)
 spin.grid(row=4,column=1,padx=5,pady=5,sticky="w")
 #Telefono
