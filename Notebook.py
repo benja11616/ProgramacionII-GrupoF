@@ -157,6 +157,36 @@ treeview.configure(yscrollcommand=scroll_y.set)
 scroll_y.grid(row=8,column=2,sticky="ns")
 
 
+#lista de pacientes
+doctores_data=[]
+#funcion para registrar pacientes
+def registrar_doctor():
+    #crear un diccionario cp los datos ingresados
+    doctor={
+        "Nombre":NombreEntry.get(),
+        "Especialidad":especialidad.get(),
+        "Edad":spin.get(),
+        "Teléfono":TelefonoEntry.get(),
+    }
+    #Agregar paciente a la lista
+    doctores_data.append(doctor)
+    #Cargar el treeview
+    cargar_treeviewD()
+def cargar_treeviewD():
+    #Limpiar el treeview
+    for doctor in treeviewD.get_children():
+        treeviewD.delete(doctor)
+    #Insertar cada paciente
+    for i, item in enumerate(doctores_data):
+        treeviewD.insert(
+            "","end",iid=str(i),
+            values=(
+                item["Nombre"],
+                item["Especialidad"],
+                item["Edad"],
+                item["Teléfono"]
+            )
+        )
 #doctores
 titulo=tk.Label(frame_doctores,text="Registro de Doctores",font=("Arial",14,"bold"))
 titulo.grid(row=0,column=1,padx=200,sticky="w")
@@ -186,7 +216,7 @@ TelefonoEntry.grid(row=5,column=1,padx=5,pady=5,sticky="w")
 btn_frameD=tk.Frame(frame_doctores)
 btn_frameD.grid(row=6,column=0,columnspan=2,pady=5,sticky="w")
 #Boton registrar
-btn_registrarD=tk.Button(btn_frameD,text="Registrar",command="")
+btn_registrarD=tk.Button(btn_frameD,text="Registrar",command=registrar_doctor)
 btn_registrarD.grid(row=0,column=0,padx=5)
 #Boton eliminar
 btn_eliminarD=tk.Button(btn_frameD,text="Eliminar",command="")
