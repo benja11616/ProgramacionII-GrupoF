@@ -25,6 +25,14 @@ def enmascarar_fecha(texto):
     else:
         edadVar.set("")
     return True
+
+def guardar_en_archivo():
+    with open("paciente.txt","w",encoding="utf-8") as archivo:  #open abre el archico txt, "w" modo write(escritura), encoding(aceptar caracteres especiales)
+            for paciente in pacientes_data:
+                archivo.write(f"{paciente['Nombre']}|{paciente['Fecha de Nacimiento']}|{paciente['Edad']}|"
+                              f"{paciente['Genero']}|{paciente['Grupo Sanguineo']}|"
+                              f"{paciente['Tipo de Seguro']}|{paciente['Centro Médico']}\n")
+
 #lista de pacientes
 pacientes_data=[]
 #funcion para registrar pacientes
@@ -41,8 +49,10 @@ def registrar_paciente():
     }
     #Agregar paciente a la lista
     pacientes_data.append(paciente)
+    guardar_en_archivo()
     #Cargar el treeview
     cargar_treeview()
+
 def cargar_treeview():
     #Limpiar el treeview
     for paciente in treeview.get_children():
@@ -61,7 +71,26 @@ def cargar_treeview():
                 item["Centro Médico"]
             )
         )
-
+def cargar_desde_archivo_pacientes():
+    try:
+        with open("paciente.txt","r",encoding="utf-8")as archivo:
+            pacientes_data.clear()
+            for linea in archivo:
+                datos=linea.strip().split("|")
+                if len(datos)==7:
+                    paciente={
+                        "Nombre":datos[0],
+                        "Fecha de Nacimiento":datos[1],
+                        "Edad":datos[2],
+                        "Genero":datos[3],
+                        "Grupo Sanguineo":datos[4],
+                        "Tipo de Seguro":datos[5],
+                        "Centro Médico":datos[6]
+                    }
+                    pacientes_data.append(paciente)
+        cargar_treeview()
+    except FileNotFoundError:
+        open("paciente.txt","w",encoding="utf-8").close()
 #Crear ventana principal
 ventanaPrincipal=tk.Tk()
 ventanaPrincipal.title("Libro de Pacientes y Doctores")
@@ -241,5 +270,5 @@ treeviewD.configure(yscrollcommand=scroll_yD.set)
 scroll_yD.grid(row=7,column=2,sticky="ns")
 
 
-
+cargar_desde_archivo_pacientes()
 ventanaPrincipal.mainloop()
