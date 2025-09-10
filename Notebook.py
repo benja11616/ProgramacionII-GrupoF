@@ -91,6 +91,20 @@ def cargar_desde_archivo_pacientes():
         cargar_treeview()
     except FileNotFoundError:
         open("paciente.txt","w",encoding="utf-8").close()
+#Funcion para eliminar paceinte
+def Eliminar_paciente():
+    seleccionado=treeview.selection()
+    if seleccionado:
+        indice=int(seleccionado[0])
+        id_item=seleccionado[0]
+        if messagebox.askyesno("Eliminar Paciente",f"¿Está seguro de aliminar el paciente'{treeview.item(id_item,'values')[0]}'?"):
+            del pacientes_data[indice]
+            guardar_en_archivo()
+            cargar_treeview()
+            messagebox.showinfo("Eliminar Paciente","Paciente eliminado exitosamente")
+    else:
+        messagebox.showwarning("Eliminar Paciente","No se ha seleccionado ningun paciente")
+        return
 #Crear ventana principal
 ventanaPrincipal=tk.Tk()
 ventanaPrincipal.title("Libro de Pacientes y Doctores")
@@ -158,7 +172,7 @@ btn_frame.grid(row=9,column=0,columnspan=2,pady=5,sticky="w")
 btn_registrar=tk.Button(btn_frame,text="Registrar",command=registrar_paciente)
 btn_registrar.grid(row=0,column=0,padx=5)
 #Boton eliminar
-btn_eliminar=tk.Button(btn_frame,text="Eliminar",command="")
+btn_eliminar=tk.Button(btn_frame,text="Eliminar",command=Eliminar_paciente)
 btn_eliminar.grid(row=0,column=1,padx=5)
 #Crear Treeview para mostrar pacientes
 treeview=ttk.Treeview(frame_pacientes,columns=("Nombre","FechaN","Edad","Genero","GrupoS","TipoS","CentroM"),show="headings")
@@ -185,7 +199,10 @@ scroll_y=ttk.Scrollbar(frame_pacientes,orient="vertical",command=treeview.yview)
 treeview.configure(yscrollcommand=scroll_y.set)
 scroll_y.grid(row=8,column=2,sticky="ns")
 
-
+def guardar_en_archivo_doctores():
+    with open("doctores.txt","w",encoding="utf-8") as archivo:  #open abre el archico txt, "w" modo write(escritura), encoding(aceptar caracteres especiales)
+            for doctor in doctores_data:
+                archivo.write(f"{doctor['Nombre']}|{doctor['Especialidad']}|{doctor['Edad']}|{doctor['Teléfono']}\n")
 #lista de pacientes
 doctores_data=[]
 #funcion para registrar pacientes
@@ -199,6 +216,7 @@ def registrar_doctor():
     }
     #Agregar paciente a la lista
     doctores_data.append(doctor)
+    guardar_en_archivo_doctores()
     #Cargar el treeview
     cargar_treeviewD()
 def cargar_treeviewD():
