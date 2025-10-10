@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formulario en tabla</title>
+    <link rel="stylesheet" href="tabla.css">
+</head>
+<body>
+    <DIV>
+        <TABLE>
+            <thead>
+                <tr>
+                    <th colspan="2">COMPLETAR EL FORMULARIO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Elija un color:</td>
+                    <td><input type="color"></td>
+                </tr>
+                <tr>
+                    <td>Escriba un mensaje:</td>
+                    <td><textarea name="mensaje" cols="30" rows="10"></textarea></td>
+                </tr>
+                <tr>
+                    <td>Elija una opción:</td>
+                    <td><select name="lenguaje">
+                        <option value="Java">Java
+                        <option value="Python">Python
+                        <option value="Tkinter">Tkinter
+                    </select></td>
+                </tr>
+                <tr>
+                    <td>Elija una opción</td>
+                    <td>
+                        <input type="checkbox" name="primero" value="1ro.">1ro.
+                        <input type="checkbox" name="segundo" value="2do.">2do.
+                        <input type="checkbox" name="tercero" value="3ro.">3ro.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Elija una fecha:</td>
+                    <td><input type="date"></td>
+                </tr>
+                <tr>
+                    <td>Elija un fichero:</td>
+                    <td><input type="file"></td>
+                </tr>
+                <tr>
+                    <td>Elija una opción</td>
+                    <td><select name="lugar" multiple="multiple">
+                        <option value="1ro">1ro
+                        <option value="2do">2do
+                        <option value="3ro">3ro
+                        <option value="4to">4to
+                    </select></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" name="Enviar"></td>
+                    <td><input type="reset" name="Resetear"></td>
+                </tr>
+            </tbody>
+        </TABLE>
+    </DIV>
+</body>
+</html>
